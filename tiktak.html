@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="tik.css">
+</head>
+<body>
+    <table>
+        <tr>
+            <td onclick="play(this)"><input maxlength="1" readonly></td>
+            <td onclick="play(this)"><input maxlength="1" readonly></td>
+            <td onclick="play(this)"><input maxlength="1" readonly></td>
+        </tr>
+        <tr>
+            <td onclick="play(this)"><input maxlength="1" readonly></td>
+            <td onclick="play(this)"><input maxlength="1" readonly></td>
+            <td onclick="play(this)"><input maxlength="1" readonly></td>
+        </tr>
+        <tr>
+            <td onclick="play(this)"><input maxlength="1" readonly></td>
+            <td onclick="play(this)"><input maxlength="1" readonly></td>
+            <td onclick="play(this)"><input maxlength="1" readonly></td>
+        </tr>
+    </table>
+    <div id="status"></div>
+    <button id="but" onclick="restart()">Restart</button>
+</body>
+
+<script type="text/javascript">
+    let current = 'O';
+
+    function play(td) {
+        let input = td.querySelector("input");
+        if (input.value !== '') return;
+
+        input.value = current;
+
+        if (check()) {
+            document.getElementById("status").textContent = `player ${current} wins!`;
+            disableall();
+        } else if (checkdraw()) {
+            document.getElementById("status").textContent = "Draw";
+        } else {
+            current = current === 'X' ? 'O' : 'X';
+            document.getElementById("status").textContent = `Now   ${current}'s  Turn`;
+        }
+    }
+
+    function check() {
+        let cells = Array.from(document.querySelectorAll("input")).map(input => input.value);
+        return (
+            (cells[0] && cells[0] === cells[1] && cells[1] === cells[2]) ||
+            (cells[3] && cells[3] === cells[4] && cells[4] === cells[5]) ||
+            (cells[6] && cells[6] === cells[7] && cells[7] === cells[8]) ||
+            (cells[0] && cells[0] === cells[3] && cells[3] === cells[6]) ||
+            (cells[1] && cells[1] === cells[4] && cells[4] === cells[7]) ||
+            (cells[2] && cells[2] === cells[5] && cells[5] === cells[8]) ||
+            (cells[0] && cells[0] === cells[4] && cells[4] === cells[8]) ||
+            (cells[2] && cells[2] === cells[4] && cells[4] === cells[6])
+        );
+    }
+
+    function checkdraw() {
+        let inputs = document.querySelectorAll("input");
+        for (let input of inputs) {
+            if (input.value === "") {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    function disableall() {
+        document.querySelectorAll("input").forEach(input => input.disabled = true);
+    }
+
+    function restart() {
+        let inputs = document.querySelectorAll("input");
+        inputs.forEach(input => {
+            input.value = "";
+            input.disabled = false;
+        });
+
+        document.getElementById("status").textContent = "";
+    }
+</script>
+</html>
